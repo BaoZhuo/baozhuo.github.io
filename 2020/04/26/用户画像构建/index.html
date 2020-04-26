@@ -88,7 +88,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://tva1.sinaimg.cn/large/007S8ZIlly1ge6yexnlxfj30js0hkq4q.jpg">
 <meta property="article:published_time" content="2020-04-26T02:20:25.000Z">
-<meta property="article:modified_time" content="2020-04-26T02:42:21.839Z">
+<meta property="article:modified_time" content="2020-04-26T03:00:48.403Z">
 <meta property="article:author" content="卓 佚">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://tva1.sinaimg.cn/large/007S8ZIlly1ge6yexnlxfj30js0hkq4q.jpg">
@@ -348,6 +348,38 @@
 </tr>
 </tbody>
 </table>
+
+<h3 id="召回与排序介绍"><a href="#召回与排序介绍" class="headerlink" title="召回与排序介绍"></a>召回与排序介绍</h3><p>召回：从海量文章数据中得到若干候选文章召回集合(数量较多)</p>
+<p>排序：从召回集合中读取推荐文章，构建样本特征进行排序过滤筛选</p>
+<ul>
+<li>用户冷启动（前期点击行为较少情况）<ul>
+<li>非个性化推荐<ul>
+<li><strong>热门召回</strong>：自定义热门规则，根据当前时间段热点定期更新维护人点文章库</li>
+<li><strong>新文章召回</strong>：为了提高新文章的曝光率，建立新文章库，进行推荐</li>
+</ul>
+</li>
+<li>个性化推荐：<ul>
+<li><strong>基于内容的协同过滤在线召回</strong>：基于用户实时兴趣画像相似的召回结果用于首页的个性化推荐</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>后期离线部分（用户点击行为较多，用户画像完善）<ul>
+<li>建立用户长期兴趣画像（详细）：包括用户各个维度的兴趣特征</li>
+<li>训练排序模型<ul>
+<li><strong>LR模型、FTRL、Wide&amp;Deep</strong></li>
+</ul>
+</li>
+<li>离线部分的召回：<ul>
+<li><strong>基于模型协同过滤推荐离线召回</strong>：ALS</li>
+<li><strong>基于内容的离线召回</strong>：或者称基于用户画像的召回</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="召回表设计与模型召回"><a href="#召回表设计与模型召回" class="headerlink" title="召回表设计与模型召回"></a>召回表设计与模型召回</h3><p>ALS模型   </p>
+
       
     </div>
     
@@ -515,7 +547,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#用户画像之标签权重算法"><span class="nav-number">1.</span> <span class="nav-text">用户画像之标签权重算法</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#用户画像之标签权重算法"><span class="nav-number">1.</span> <span class="nav-text">用户画像之标签权重算法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#召回与排序介绍"><span class="nav-number"></span> <span class="nav-text">召回与排序介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#召回表设计与模型召回"><span class="nav-number"></span> <span class="nav-text">召回表设计与模型召回</span></a></div>
             
 
           </div>
