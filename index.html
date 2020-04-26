@@ -241,6 +241,168 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://www.zhuoyiadd.cn/2020/04/26/%E6%96%87%E7%AB%A0%E7%94%BB%E5%83%8F%E6%9E%84%E5%BB%BA/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="卓 佚">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Zhuo Yi'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/04/26/%E6%96%87%E7%AB%A0%E7%94%BB%E5%83%8F%E6%9E%84%E5%BB%BA/" itemprop="url">文章画像构建</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-04-26T09:37:49+08:00">
+                2020-04-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>文章画像，就是给每篇文章定义一些词。主题词与关键词最大的区别就是主题词经过了规范化处理。</p>
+<ul>
+<li><p>关键词：TFIDF/TextRank计算出的结果TOPK个词以及权重</p>
+</li>
+<li><p>主题词：TextRank的TOPK词 与 ITFDF计算的TOPK个词的交集</p>
+<h3 id="Tfidf计算"><a href="#Tfidf计算" class="headerlink" title="Tfidf计算"></a>Tfidf计算</h3></li>
+<li><p><strong>当有TF(词频)和IDF(逆文档频率)后，将这两个词相乘，就能得到一个词的TF-IDF的值。某个词在文章中的TF-IDF越大，那么一般而言这个词在这篇文章的重要性会越高，所以通过计算文章中各个词的TF-IDF，由大到小排序，排在最前面的几个词，就是该文章的关键词。</strong></p>
+</li>
+<li><p>1、读取N篇文章数据文章数据进行分词处理,得到分词结果</p>
+</li>
+<li><p>2、TFIDF模型训练保存，spark使用count与idf进行计算</p>
+<ul>
+<li>TFIDF计算方案：</li>
+<li>先计算分词之后的每篇文章的词频，得到CV模型</li>
+<li>然后根据词频计算IDF以及词，得到IDF模型</li>
+</ul>
+</li>
+<li><p>3、使用模型计算N篇文章数据的TFIDF值</p>
+</li>
+</ul>
+<h3 id="TextRank提取关键词"><a href="#TextRank提取关键词" class="headerlink" title="TextRank提取关键词"></a>TextRank提取关键词</h3><p>关键词抽取的任务就是从一段给定的文本中自动抽取出若干有意义的词语或词组。<strong>TextRank算法是利用局部词汇之间关系（共现窗口）对后续关键词进行排序，直接从文本本身抽取</strong></p>
+<ul>
+<li><p>定义:通过词之间的相邻关系构建网络，然后用<a href="https://link.zhihu.com/?target=http%3A//www.cnblogs.com/en-heng/p/6124526.html">PageRank</a>迭代计算每个节点的rank值，排序rank值即可得到关键词</p>
+</li>
+<li><p>方法：无向图模型进行权重计算</p>
+</li>
+<li><p>基于TextRank的关键词提取过程步骤如下：</p>
+<ul>
+<li><strong>把给定的文本T按照完整句子进行分割</strong>，对于每个句子，进行分词和词性标注处理，并过滤掉停用词，只保留指定词性的单词，如名词、动词、形容词，即，其中是保留后的候选关键词。</li>
+<li>构建候选关键词图G = (V,E)，其中V为节点集，上一步生成的候选关键词组成，然后采用共现关系（co-occurrence）构造任两点之间的边，<strong>两个节点之间存在边仅当它们对应的词汇在长度为K的窗口中共现，K表示窗口大小，即最多共现K个单词。</strong>根据上面公式，迭代传播各节点的权重，直至收敛。</li>
+<li><strong>对节点权重进行倒序排序，从而得到最重要的T个单词，作为候选关键词</strong>。</li>
+</ul>
+<h3 id="文章画像结果"><a href="#文章画像结果" class="headerlink" title="文章画像结果"></a>文章画像结果</h3><p>对文章进行计算画像</p>
+<ul>
+<li>步骤：<ul>
+<li>1、加载IDF，保留关键词以及权重计算(TextRank * IDF)？为什么？合并关键词权重到字典结果</li>
+<li>2、将tfidf和textrank共现的词作为主题词</li>
+<li>4、将主题词表和关键词表进行合并，插入表</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://www.zhuoyiadd.cn/2020/01/25/%E3%80%82%E3%80%82%E3%80%82/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -395,7 +557,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-count">2</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
