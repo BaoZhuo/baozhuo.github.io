@@ -79,26 +79,52 @@
 
 
 
-<meta name="description" content="!(https:&#x2F;&#x2F;tva1.sinaimg.cn&#x2F;large&#x2F;007S8ZIlgy1ge70tu6y5yj30h40hsmzs.jpg) !(https:&#x2F;&#x2F;tva1.sinaimg.cn&#x2F;large&#x2F;007S8ZIlgy1ge70u4yuqbj30hs0cugpa.jpg) !(https:&#x2F;&#x2F;tva1.sinaimg.cn&#x2F;large&#x2F;007S8ZIlgy1ge70ucpuvxj308i02">
+<meta name="description" content="多项式模型是包含特征组合的最直观的模型。在多项式模型中，特征  和  的组合采用  表示，即)和都非零时，组合特征  才有意义。从对比的角度，本文只讨论二阶多项式模型。模型的表达式如下：  (1) 其中，  代表样本的特征数量，是第  个特征的值，  是模型参数。 从公式来看，模型前半部分就是普通的LR线性组合，后半部分的交叉项即：特征的组合。单从模型表达能力上来看，FM的表达能力是强于LR的，">
 <meta property="og:type" content="article">
-<meta property="og:title" content="ALS协同过滤">
-<meta property="og:url" content="https://www.zhuoyiadd.cn/2020/04/26/ALS%E5%8D%8F%E5%90%8C%E8%BF%87%E6%BB%A4/index.html">
+<meta property="og:title" content="FM">
+<meta property="og:url" content="https://www.zhuoyiadd.cn/2020/04/26/FM/index.html">
 <meta property="og:site_name" content="Zhuo Yi&#39;Blog">
-<meta property="og:description" content="!(https:&#x2F;&#x2F;tva1.sinaimg.cn&#x2F;large&#x2F;007S8ZIlgy1ge70tu6y5yj30h40hsmzs.jpg) !(https:&#x2F;&#x2F;tva1.sinaimg.cn&#x2F;large&#x2F;007S8ZIlgy1ge70u4yuqbj30hs0cugpa.jpg) !(https:&#x2F;&#x2F;tva1.sinaimg.cn&#x2F;large&#x2F;007S8ZIlgy1ge70ucpuvxj308i02">
+<meta property="og:description" content="多项式模型是包含特征组合的最直观的模型。在多项式模型中，特征  和  的组合采用  表示，即)和都非零时，组合特征  才有意义。从对比的角度，本文只讨论二阶多项式模型。模型的表达式如下：  (1) 其中，  代表样本的特征数量，是第  个特征的值，  是模型参数。 从公式来看，模型前半部分就是普通的LR线性组合，后半部分的交叉项即：特征的组合。单从模型表达能力上来看，FM的表达能力是强于LR的，">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://tva1.sinaimg.cn/large/007S8ZIlgy1ge70d08ki9j302v00t3ya.jpg">
-<meta property="og:image" content="https://tva1.sinaimg.cn/large/007S8ZIlgy1ge70d1uixuj307801mjrb.jpg">
-<meta property="og:image" content="https://tva1.sinaimg.cn/large/007S8ZIlgy1ge70d0wwr0j3071032glp.jpg">
-<meta property="og:image" content="https://tva1.sinaimg.cn/large/007S8ZIlgy1ge70d1c9asj305y01g3yg.jpg">
-<meta property="og:image" content="https://tva1.sinaimg.cn/large/007S8ZIlgy1ge70d2digbj305x00xq2s.jpg">
-<meta property="og:image" content="https://tva1.sinaimg.cn/large/007S8ZIlgy1ge74zpysy5j30k005bwen.jpg">
-<meta property="og:image" content="https://tva1.sinaimg.cn/large/007S8ZIlgy1ge74zpbtw3j30k0059mxb.jpg">
-<meta property="og:image" content="https://tva1.sinaimg.cn/large/007S8ZIlgy1ge74zqs6jxj30k005eaa8.jpg">
-<meta property="article:published_time" content="2020-04-26T03:26:53.000Z">
-<meta property="article:modified_time" content="2020-04-26T06:09:11.827Z">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/007S8ZIlly1ge7jkh1611j30hs0hhjx2.jpg">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=x_i">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=x_j">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=x_ix_j">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=x_i">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=x_j">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=x_ix_j">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=y(X)%253D%5Comega_0%252B%5Csum_%7Bi%253D1%7D%5E%7Bn%7D%7B%5Comega_ix_i%7D%252B%5Csum_%7Bi%253D1%7D%5E%7Bn-1%7D%7B%5Csum_%7Bj%253Di%252B1%7D%5E%7Bn%7D%7B%5Comega_%7Bij%7Dx_ix_j%7D%7D">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=n">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=x_i">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=i">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=%5Comega_0%252C+%5Comega_i%252C+%5Comega_%7Bij%7D">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=+%5Comega_%7Bij%7D">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=x_i">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=x_j">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=x_i">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=x_j">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=+%5Comega_%7Bij%7D">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=A%253DQ%5Cwedge+Q%5ET">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=+%5Comega_%7Bij%7D">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=W">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=W%253DV%5ETV">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=V">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=j">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=v_j">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=j">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=x_j">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=x_i">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=x_j">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=x_i">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=x_j">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=w_%7Bij%7D%253D%E2%9F%A8v_i%252Cv_j%E2%9F%A9">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/007S8ZIlly1ge7k78ptajj31bq0sqn2f.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/007S8ZIlly1ge7kljh9loj30vc0a4ad6.jpg">
+<meta property="article:published_time" content="2020-04-26T14:31:10.000Z">
+<meta property="article:modified_time" content="2020-04-27T00:57:42.311Z">
 <meta property="article:author" content="卓 佚">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://tva1.sinaimg.cn/large/007S8ZIlgy1ge70d08ki9j302v00t3ya.jpg">
+<meta name="twitter:image" content="https://tva1.sinaimg.cn/large/007S8ZIlly1ge7jkh1611j30hs0hhjx2.jpg">
 
 
 
@@ -128,13 +154,13 @@
 
 
 
-  <link rel="canonical" href="https://www.zhuoyiadd.cn/2020/04/26/ALS协同过滤/"/>
+  <link rel="canonical" href="https://www.zhuoyiadd.cn/2020/04/26/FM/"/>
 
 
 
 
 
-  <title>ALS协同过滤 | Zhuo Yi'Blog</title>
+  <title>FM | Zhuo Yi'Blog</title>
   
 
 
@@ -251,7 +277,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://www.zhuoyiadd.cn/2020/04/26/ALS%E5%8D%8F%E5%90%8C%E8%BF%87%E6%BB%A4/">
+    <link itemprop="mainEntityOfPage" href="https://www.zhuoyiadd.cn/2020/04/26/FM/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="卓 佚">
@@ -268,7 +294,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">ALS协同过滤</h1>
+          <h1 class="post-title" itemprop="name headline">FM</h1>
         
 
         <div class="post-meta">
@@ -280,7 +306,7 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-04-26T11:26:53+08:00">
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-04-26T22:31:10+08:00">
                 2020-04-26
               </time>
             
@@ -318,38 +344,20 @@
       
 
       
-        <p>!(<a href="https://tva1.sinaimg.cn/large/007S8ZIlgy1ge70tu6y5yj30h40hsmzs.jpg" target="_blank" rel="noopener">https://tva1.sinaimg.cn/large/007S8ZIlgy1ge70tu6y5yj30h40hsmzs.jpg</a>)</p>
-<p>!(<a href="https://tva1.sinaimg.cn/large/007S8ZIlgy1ge70u4yuqbj30hs0cugpa.jpg" target="_blank" rel="noopener">https://tva1.sinaimg.cn/large/007S8ZIlgy1ge70u4yuqbj30hs0cugpa.jpg</a>)</p>
-<p>!(<a href="https://tva1.sinaimg.cn/large/007S8ZIlgy1ge70ucpuvxj308i02st8o.jpg" target="_blank" rel="noopener">https://tva1.sinaimg.cn/large/007S8ZIlgy1ge70ucpuvxj308i02st8o.jpg</a>)</p>
-<p>步骤：</p>
-<ul>
-<li>1、数据类型转换,clicked以及用户ID与文章ID处理</li>
-<li>2、ALS模型训练以及推荐</li>
-<li>3、推荐结果解析处理</li>
-<li>4、推荐结果存储</li>
-</ul>
-<p>如果想通过矩阵分解的方法实现基于模型的协同过滤，ALS是一个不错的选择，其英文全称是Alternating Least Square，翻译过来是交替最小二乘法。假设用户为a，物品为b，评分矩阵为R(m, n)，可分解为用户矩阵U(k, m)和物品矩阵I(k, n)，其中m, n, k代表矩阵的维度。前方小段数学公式低能预警：</p>
-<p>根据矩阵分解的定义，有<br><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1ge70d08ki9j302v00t3ya.jpg" alt="image"><br>用MSE作为损失函数，为了方便化简，加法符号左侧的常数改为-1/2<br><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1ge70d1uixuj307801mjrb.jpg" alt="image"></p>
-<ol>
-<li>对损失函数求U_a的一阶偏导数，那<br><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1ge70d0wwr0j3071032glp.jpg" alt="image"></li>
-<li>令一阶偏导数等于0<br><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1ge70d1c9asj305y01g3yg.jpg" alt="image"></li>
-<li>同理，可证<br><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1ge70d2digbj305x00xq2s.jpg" alt="image"></li>
-</ol>
-<p>1.6 求解用户矩阵U和物品矩阵I</p>
-<ol>
-<li>利用1.5中的式5、R和U求出I</li>
-<li>利用1.5中的式6、R和I求出U</li>
-</ol>
-<p>如此交替地执行步骤1和步骤2，直到算法收敛或者迭代次数超过了最大限制，最终我们用RMSE来评价模型的好坏。</p>
-<p>我们通过音乐打分这个案例介绍下交替最小二乘法的原理，首先拿到的原始数据是每个听众对每首歌的评分矩阵A，这个评分可能是非常稀疏的，因为不是每个用户都听过所有的歌，也不是每个用户都会对每首歌评分。</p>
-<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1ge74zpysy5j30k005bwen.jpg" alt="img"></p>
-<p>ALS矩阵分解会把矩阵A分解成两个矩阵的相乘，分别是X矩阵和Y矩阵，</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">矩阵A&#x3D;矩阵X和矩阵Y的转秩的乘积</span><br></pre></td></tr></table></figure>
-
-<p>x的列表示和Y的横表示可以称之为ALS中的因子，这个因子是有隐含定义的，这里假设有3个因子，分别是性格、教育程度、爱好。A矩阵经过ALS分解出的X、Y矩阵可以分别表示成：</p>
-<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1ge74zpbtw3j30k0059mxb.jpg" alt="img">)(上图为x矩阵)</p>
-<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1ge74zqs6jxj30k005eaa8.jpg" alt="img">)(上图为Y矩阵)</p>
-<p>数据经过这样的拆解就很容易做用户对音乐的评分预测。比如有听众6，他从没听过“红豆“这首歌，但是我们可以拿到听众6在矩阵分解中X矩阵的向量M，这时候只有把向量M和”红豆“在Y矩阵中的对应向量N相乘，就能预测出听众6对于”红豆“这首歌的评分。</p>
+        <p><img src="https://tva1.sinaimg.cn/large/007S8ZIlly1ge7jkh1611j30hs0hhjx2.jpg" alt="img"></p>
+<p>多项式模型是包含特征组合的最直观的模型。在多项式模型中，特征 <img src="https://www.zhihu.com/equation?tex=x_i" alt="[公式]"> 和 <img src="https://www.zhihu.com/equation?tex=x_j" alt="[公式]"> 的组合采用 <img src="https://www.zhihu.com/equation?tex=x_ix_j" alt="[公式]"> 表示，即<img src="https://www.zhihu.com/equation?tex=x_i" alt="[公式]">)和<img src="https://www.zhihu.com/equation?tex=x_j" alt="[公式]">都非零时，组合特征 <img src="https://www.zhihu.com/equation?tex=x_ix_j" alt="[公式]"> 才有意义。从对比的角度，本文只讨论二阶多项式模型。模型的表达式如下：</p>
+<p><img src="https://www.zhihu.com/equation?tex=y(X)%3D%5Comega_0%2B%5Csum_%7Bi%3D1%7D%5E%7Bn%7D%7B%5Comega_ix_i%7D%2B%5Csum_%7Bi%3D1%7D%5E%7Bn-1%7D%7B%5Csum_%7Bj%3Di%2B1%7D%5E%7Bn%7D%7B%5Comega_%7Bij%7Dx_ix_j%7D%7D" alt="[公式]"> (1)</p>
+<p>其中， <img src="https://www.zhihu.com/equation?tex=n" alt="[公式]"> 代表样本的特征数量，<img src="https://www.zhihu.com/equation?tex=x_i" alt="[公式]">是第 <img src="https://www.zhihu.com/equation?tex=i" alt="[公式]"> 个特征的值， <img src="https://www.zhihu.com/equation?tex=%5Comega_0%2C+%5Comega_i%2C+%5Comega_%7Bij%7D" alt="[公式]"> 是模型参数。</p>
+<p>从公式来看，模型前半部分就是普通的LR线性组合，后半部分的交叉项即：特征的组合。单从模型表达能力上来看，FM的表达能力是强于LR的，至少不会比LR弱，当交叉项参数全为0时退化为普通的LR模型。</p>
+<p>二次项参数的训练是很困难的。其原因是：每个参数 <img src="https://www.zhihu.com/equation?tex=+%5Comega_%7Bij%7D" alt="[公式]"> 的训练需要大量<img src="https://www.zhihu.com/equation?tex=x_i" alt="[公式]"> 和 <img src="https://www.zhihu.com/equation?tex=x_j" alt="[公式]">)都非零的样本；由于样本数据本来就比较稀疏，满足“<img src="https://www.zhihu.com/equation?tex=x_i" alt="[公式]"> 和 <img src="https://www.zhihu.com/equation?tex=x_j" alt="[公式]">都非零”的样本将会非常少。训练样本的不足，很容易导致参数 <img src="https://www.zhihu.com/equation?tex=+%5Comega_%7Bij%7D" alt="[公式]"> 不准确，最终将严重影响模型的性能。</p>
+<p>任意的 <em>N</em>×<em>N</em> <a href="https://link.zhihu.com/?target=https%3A//baike.baidu.com/item/%E5%AE%9E%E5%AF%B9%E7%A7%B0%E7%9F%A9%E9%98%B5">实对称矩阵</a>都有 <em>N</em> 个线性无关的<a href="https://link.zhihu.com/?target=https%3A//baike.baidu.com/item/%E7%89%B9%E5%BE%81%E5%90%91%E9%87%8F/8663983">特征向量</a>。并且这些特征向量都可以正交单位化而得到一组正交且模为 1 的向量。故实对称矩阵 <strong>A</strong> 可被分解成：</p>
+<p><img src="https://www.zhihu.com/equation?tex=A%3DQ%5Cwedge+Q%5ET" alt="[公式]"></p>
+<p>其中<strong>Q</strong>为<a href="https://link.zhihu.com/?target=https%3A//baike.baidu.com/item/%E6%AD%A3%E4%BA%A4%E7%9F%A9%E9%98%B5">正交矩阵</a>，<strong>Λ</strong>为实<a href="https://link.zhihu.com/?target=https%3A//baike.baidu.com/item/%E5%AF%B9%E8%A7%92%E7%9F%A9%E9%98%B5">对角矩阵</a>。</p>
+<p>类似地，所有二次项参数 <img src="https://www.zhihu.com/equation?tex=+%5Comega_%7Bij%7D" alt="[公式]"> 可以组成一个对称阵 <img src="https://www.zhihu.com/equation?tex=W" alt="[公式]"> （为了方便说明FM的由来，对角元素可以设置为正实数），那么这个矩阵就可以分解为 <img src="https://www.zhihu.com/equation?tex=W%3DV%5ETV" alt="[公式]"> ， <img src="https://www.zhihu.com/equation?tex=V" alt="[公式]"> 的第 <img src="https://www.zhihu.com/equation?tex=j" alt="[公式]"> 列( <img src="https://www.zhihu.com/equation?tex=v_j" alt="[公式]">) )便是第 <img src="https://www.zhihu.com/equation?tex=j" alt="[公式]"> 维特征( <img src="https://www.zhihu.com/equation?tex=x_j" alt="[公式]">) )的隐向量。换句话说，特征分量 <img src="https://www.zhihu.com/equation?tex=x_i" alt="[公式]"> 和 <img src="https://www.zhihu.com/equation?tex=x_j" alt="[公式]"> 的交叉项系数就等于<img src="https://www.zhihu.com/equation?tex=x_i" alt="[公式]">)对应的隐向量与<img src="https://www.zhihu.com/equation?tex=x_j" alt="[公式]">对应的隐向量的内积，即每个参数 <img src="https://www.zhihu.com/equation?tex=w_%7Bij%7D%3D%E2%9F%A8v_i%2Cv_j%E2%9F%A9" alt="[公式]"> ，<strong>这就是FM模型的核心思想</strong>。</p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlly1ge7k78ptajj31bq0sqn2f.jpg" alt="image-20200426225509053"></p>
+<p>FFM</p>
+<p><img src="https://tva1.sinaimg.cn/large/007S8ZIlly1ge7kljh9loj30vc0a4ad6.jpg" alt="image-20200426230853781"></p>
+<p>交叉项与FM算法的&lt;vi , vj&gt;不同，这里的是&lt;vi,fj , vj,fi&gt;</p>
 
       
     </div>
@@ -374,8 +382,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2020/04/26/%E7%94%A8%E6%88%B7%E7%94%BB%E5%83%8F%E6%9E%84%E5%BB%BA/" rel="next" title="用户画像构建">
-                <i class="fa fa-chevron-left"></i> 用户画像构建
+              <a href="/2020/04/26/ALS%E5%8D%8F%E5%90%8C%E8%BF%87%E6%BB%A4/" rel="next" title="ALS协同过滤">
+                <i class="fa fa-chevron-left"></i> ALS协同过滤
               </a>
             
           </div>
@@ -383,10 +391,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2020/04/26/FM/" rel="prev" title="FM">
-                FM <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
